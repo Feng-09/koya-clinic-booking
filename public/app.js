@@ -41,9 +41,16 @@ async function loadSlots() {
     return;
   }
 
+  // The API returns every slot, past included (the spec requires it);
+  // the page only offers upcoming ones.
+  const upcoming = body.slots.filter((s) => Date.parse(s.start) > Date.now());
   const list = $("#slot-list");
   list.innerHTML = "";
-  for (const slot of body.slots) {
+  if (upcoming.length === 0) {
+    list.innerHTML = '<p class="muted">No upcoming slots right now.</p>';
+    return;
+  }
+  for (const slot of upcoming) {
     const card = document.createElement("div");
     card.className = "card" + (slot.available ? "" : " taken");
     card.innerHTML = `
