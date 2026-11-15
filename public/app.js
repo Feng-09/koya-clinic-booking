@@ -106,7 +106,10 @@ const cursorHistory = [];
 async function loadBookings(email, cursor) {
   const qs = new URLSearchParams({ email, limit: "5" });
   if (cursor) qs.set("cursor", cursor);
-  const { status, body } = await api(`/bookings?${qs}`);
+  const [{ status, body }, slotsRes] = await Promise.all([
+    api(`/bookings?${qs}`),
+    api("/slots"),
+  ]);
 
   if (status === 400) {
     $("#lookup-msg").textContent = body?.error ?? "Invalid request.";
@@ -122,13 +125,18 @@ async function loadBookings(email, cursor) {
     body.bookings.length === 0 ? "No bookings found for that email." : "";
   $("#pager").classList.toggle("hidden", !(cursorHistory.length > 0 || pageCursors.next));
 
+  const slotById = new Map(slotsRes.body.slots.map((s) => [s.id, s]));
   for (const b of body.bookings) {
+    const slot = slotById.get(b.slot_id);
+    const appointment = slot
+      ? `${slot.provider} · ${fmt(slot.start)}`
+      : b.slot_id;
     const card = document.createElement("div");
     card.className = "card" + (b.status === "cancelled" ? " taken" : "");
     card.innerHTML = `
       <strong>${b.status === "confirmed" ? "Confirmed" : "Cancelled"}</strong>
-      <span>${b.slot_id} · booked ${fmt(b.created_at)}</span>
-      <span class="muted small">${b.id}</span>
+      <span>${appointment}</span>
+      <span class="muted small">booked ${fmt(b.created_at)} · ${b.id}</span>
       ${b.status === "confirmed" ? '<button class="danger">Cancel</button>' : ""}`;
     const cancelBtn = card.querySelector("button");
     if (cancelBtn) {
