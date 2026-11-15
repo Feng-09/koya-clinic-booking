@@ -1,0 +1,6 @@
+node_modules/
+.env
+test/pgdata/
+test/pgdata-dev/
+test-out.txt
+test-out*.txt

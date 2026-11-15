@@ -1,0 +1,106 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #f4f6f8;
+  color: #1c2430;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+h1 { margin-bottom: 0; }
+.tagline { margin-top: 4px; color: #5a6a7a; }
+
+section { margin-top: 40px; }
+
+.cards {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #dde4ea;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.card span { flex: 1; }
+.card.taken { opacity: 0.55; }
+
+button {
+  border: 0;
+  border-radius: 8px;
+  background: #0b6bcb;
+  color: #fff;
+  padding: 9px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:disabled { background: #9db3c8; cursor: default; }
+button.secondary { background: #e4ebf2; color: #1c2430; }
+button.danger { background: #c0392b; }
+
+#lookup-form { display: flex; gap: 8px; margin-top: 12px; }
+
+input {
+  border: 1px solid #c4cfd9;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 14px;
+}
+
+#lookup-form input { flex: 1; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 25, 35, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  width: min(420px, 90vw);
+  display: grid;
+  gap: 12px;
+}
+
+.modal-box label { display: grid; gap: 4px; font-size: 14px; color: #43525f; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+.muted { color: #7b8a99; }
+.small { font-size: 12px; }
+.error { color: #c0392b; }
+
+.pager { display: flex; justify-content: center; gap: 12px; margin-top: 16px; }
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #123524;
+  color: #eafff3;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 14px;
+}
+
+.toast.error { background: #4a1512; color: #ffe9e7; }
+.hidden { display: none; }

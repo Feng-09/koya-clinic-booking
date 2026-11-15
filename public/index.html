@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koya Clinic — Book an appointment</title>
+<link rel="stylesheet" href="/styles.css">
+<script src="/config.js"></script>
+</head>
+<body>
+<main>
+  <h1>Koya Clinic</h1>
+  <p class="tagline">Book an appointment with one of our providers.</p>
+
+  <section id="book-section">
+    <h2>Available slots</h2>
+    <div id="slot-list" class="cards"><p class="muted">Loading slots…</p></div>
+  </section>
+
+  <div id="booking-modal" class="modal hidden">
+    <div class="modal-box">
+      <h3>Book this slot</h3>
+      <p id="modal-slot" class="muted"></p>
+      <label>Full name <input id="f-name" type="text" autocomplete="name"></label>
+      <label>Email <input id="f-email" type="email" autocomplete="email"></label>
+      <div class="modal-actions">
+        <button id="modal-cancel" class="secondary">Cancel</button>
+        <button id="modal-confirm">Confirm booking</button>
+      </div>
+      <p id="modal-error" class="error"></p>
+    </div>
+  </div>
+
+  <section id="lookup-section">
+    <h2>My bookings</h2>
+    <form id="lookup-form">
+      <input id="lookup-email" type="email" placeholder="you@example.com" required>
+      <button type="submit">Look up</button>
+    </form>
+    <div id="booking-list" class="cards"></div>
+    <div id="pager" class="pager hidden">
+      <button id="prev-page" class="secondary">← Newer</button>
+      <button id="next-page" class="secondary">Older →</button>
+    </div>
+    <p id="lookup-msg" class="muted"></p>
+  </section>
+
+  <p id="toast" class="toast hidden"></p>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
