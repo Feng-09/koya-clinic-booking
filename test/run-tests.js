@@ -3,7 +3,8 @@
 // the API on a test port, then exercises every level of the spec with
 // real HTTP requests.
 
-process.env.API_KEY = "test-key";
+process.env.API_KEY = process.env.TEST_API_KEY || "test-key";
+const BASE = process.env.BASE_URL || "http://localhost:3555";
 const externalDb = process.env.TEST_DATABASE_URL;
 process.env.DATABASE_URL =
   externalDb ?? "postgres://postgres:postgres@localhost:55432/postgres";
@@ -12,7 +13,7 @@ const EmbeddedPostgres = require("embedded-postgres").default;
 
 async function main() {
   let pg;
-  if (!externalDb) {
+  if (!externalDb && !process.env.BASE_URL) {
     pg = new EmbeddedPostgres({
       databaseDir: "./test/pgdata",
       user: "postgres",
@@ -23,14 +24,14 @@ async function main() {
     await pg.start();
   }
 
-  const { migrate } = require("../src/db");
-  await migrate();
+  let server = null;
+  if (!process.env.BASE_URL) {
+    const { migrate } = require("../src/db");
+    await migrate();
+    server = require("../src/app").listen(3555);
+  }
 
-  const app = require("../src/app");
-  const server = app.listen(3555);
-
-  const BASE = "http://localhost:3555";
-  const KEY = { "X-API-Key": "test-key" };
+  const KEY = { "X-API-Key": process.env.API_KEY };
   let passed = 0;
   let failed = 0;
 
@@ -277,7 +278,7 @@ async function main() {
   });
 
   console.log(`\n${passed} passed, ${failed} failed`);
-  server.close();
+  server?.close();
   if (pg) await pg.stop();
   process.exit(failed > 0 ? 1 : 0);
 }
